@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1001361513310",
+    "project_id": "enviroflow-detect",
+    "storage_bucket": "enviroflow-detect.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001361513310:android:9b4bc3a86e8f8cd04c8dcf",
+        "android_client_info": {
+          "package_name": "com.example.ed_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmiw_RR1PRm3wWGE8Gx4Kf7gwQF8BJpYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
