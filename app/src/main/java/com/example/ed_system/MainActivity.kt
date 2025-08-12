@@ -5,17 +5,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ed_system.adapter.DeviceAdapter
-import com.example.ed_system.model.Device
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var deviceAdapter: DeviceAdapter
-    private val deviceList = mutableListOf<Device>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,32 +21,39 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Bottom navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // Load the default fragment (Dashboard/Home)
+        if (savedInstanceState == null) {
+            replaceFragment(DashboardFragment()) // You can create a dashboard fragment or keep it blank
+        }
+
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_dashboard -> true
-                R.id.nav_monitor -> true
-                R.id.nav_history -> true
-                R.id.nav_settings -> true
+                R.id.nav_dashboard -> {
+                    replaceFragment(DashboardFragment())
+                    true
+                }
+                R.id.nav_monitor -> {
+                    replaceFragment(MonitorFragment())
+                    true
+                }
+                R.id.nav_history -> {
+                    replaceFragment(HistoryFragment())
+                    true
+                }
+                R.id.nav_settings -> {
+                    replaceFragment(SettingsFragment()) // This will show your Settings screen
+                    true
+                }
                 else -> false
             }
         }
+    }
 
-        // RecyclerView setup
-        recyclerView = findViewById(R.id.deviceRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        deviceAdapter = DeviceAdapter(deviceList, this)
-        recyclerView.adapter = deviceAdapter
-
-        // Sample data
-        deviceList.add(
-            Device("Lake Monitor A", "EFD-001", true, 8, 92, "3m ago")
-        )
-        deviceList.add(
-            Device("Lake Monitor B", "EFD-002", false, 72, 68, "10m ago")
-        )
-
-        deviceAdapter.notifyDataSetChanged()
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment) // fragmentContainer is a FrameLayout in activity_main.xml
+            .commit()
     }
 }
