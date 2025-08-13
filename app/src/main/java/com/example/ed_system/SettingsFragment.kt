@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ed_system.adapter.DeviceAdapter
 import com.example.ed_system.model.Device
+import com.example.ed_system.adapter.DeviceAdapter
+
 
 class SettingsFragment : Fragment() {
 

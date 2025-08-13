@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         // Load the default fragment (Dashboard/Home)
         if (savedInstanceState == null) {
-            replaceFragment(DashboardFragment()) // You can create a dashboard fragment or keep it blank
+            replaceFragment(DashboardFragment())
         }
 
         bottomNav.setOnItemSelectedListener { item ->
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_settings -> {
-                    replaceFragment(SettingsFragment()) // This will show your Settings screen
+                    replaceFragment(SettingsFragment())
                     true
                 }
                 else -> false
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment) // fragmentContainer is a FrameLayout in activity_main.xml
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }

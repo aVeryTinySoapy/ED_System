@@ -16,7 +16,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Top Row: Name + Status -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +59,6 @@
                 android:paddingVertical="5dp" />
         </LinearLayout>
 
-        <!-- Battery + Signal Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +66,6 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="6dp">
 
-            <!-- Battery -->
             <ImageView
                 android:id="@+id/batteryIcon"
                 android:layout_width="20dp"
@@ -85,13 +82,12 @@
                 android:textSize="14sp"
                 android:textColor="#4CAF50" />
 
-            <!-- Spacer (equal space between battery & signal) -->
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <!-- Signal -->
+
             <ImageView
                 android:id="@+id/signalIcon"
                 android:layout_width="20dp"
@@ -108,7 +104,7 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Last Reading -->
+
         <TextView
             android:id="@+id/lastReading"
             android:layout_width="wrap_content"
