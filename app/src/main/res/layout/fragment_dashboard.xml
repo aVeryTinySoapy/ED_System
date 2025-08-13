@@ -28,6 +28,7 @@
             android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="16dp" />
 
+        <!-- CURRENT PARAMETERS -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +54,7 @@
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <View
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.25" />
@@ -66,7 +67,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp" />
 
-            <View
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.25" />
@@ -79,7 +80,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1" />
 
-            <View
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.25" />
@@ -94,7 +95,7 @@
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <View
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.25" />
@@ -107,23 +108,43 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1" />
 
-            <View
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.25" />
         </LinearLayout>
 
-        <!-- DEVICE STATUS SECTION -->
+        <!-- ACTIVE ALERTS -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Alerts"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="8dp" />
+
+        <include
+            layout="@layout/item_alert_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            layout="@layout/item_alert_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <!-- DEVICE STATUS -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Device Status"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- DEVICE CARD -->
         <include
             android:id="@+id/deviceCard"
             layout="@layout/item_device_card"
