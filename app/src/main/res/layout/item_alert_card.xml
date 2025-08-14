@@ -5,7 +5,8 @@
     android:padding="12dp"
     android:layout_marginBottom="16dp"
     android:background="@drawable/bg_alert_card"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:gravity="center_vertical">
 
     <!-- Left Icon -->
     <ImageView
@@ -29,8 +30,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/alertTitle"
@@ -40,7 +41,9 @@
                 android:text="Dissolved oxygen critically low in River Monitor C"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:singleLine="true" />
 
             <TextView
                 android:id="@+id/alertTime"
@@ -51,11 +54,22 @@
                 android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 
+        <!-- Description row -->
+        <TextView
+            android:id="@+id/alertDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Dissolved oxygen dropped below safe threshold for aquatic life."
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray" />
+
         <!-- Second row: values -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/alertValue"
@@ -76,5 +90,16 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Optional status label on the far right -->
+    <TextView
+        android:id="@+id/alertStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="DANGER"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:textColor="@android:color/holo_red_dark" />
 
 </LinearLayout>

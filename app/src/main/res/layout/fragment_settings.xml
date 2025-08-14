@@ -56,7 +56,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:overScrollMode="never" />
+                android:overScrollMode="never"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/devicePlaceholder"
+                layout="@layout/item_device_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
