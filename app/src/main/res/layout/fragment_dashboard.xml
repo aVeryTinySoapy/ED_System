@@ -161,12 +161,14 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="8dp" />
 
-        <include
-            android:id="@+id/deviceCard"
-            layout="@layout/item_device_card"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/deviceRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:nestedScrollingEnabled="false"
             android:layout_marginBottom="20dp" />
+
 
     </LinearLayout>
 </ScrollView>

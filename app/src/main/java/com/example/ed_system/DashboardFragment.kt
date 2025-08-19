@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.model.Alert
+import com.example.ed_system.model.Device
 import com.example.ed_system.adapter.AlertAdapter
+import com.example.ed_system.adapter.DeviceAdapter
 
 class DashboardFragment : Fragment() {
 
@@ -37,6 +39,10 @@ class DashboardFragment : Fragment() {
     private lateinit var alertsRecyclerView: RecyclerView
     private lateinit var alertsAdapter: AlertAdapter
     private lateinit var noAlertsText: TextView
+
+    // Device status
+    private lateinit var deviceRecycler: RecyclerView
+    private lateinit var deviceAdapter: DeviceAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,7 +85,11 @@ class DashboardFragment : Fragment() {
         alertsAdapter = AlertAdapter()
         alertsRecyclerView.adapter = alertsAdapter
 
-        // Dashboard sample data
+        // Devices section
+        deviceRecycler = view.findViewById(R.id.deviceRecycler)
+        deviceRecycler.layoutManager = LinearLayoutManager(requireContext())
+
+        // Sample parameter
         updateDashboard(
             siteLocation = "Lake Site 1 • LAKE",
             dissolvedOxygen = "7.44 mg/L",
@@ -102,9 +112,16 @@ class DashboardFragment : Fragment() {
                 timeAgo = "16m ago"
             )
         )
-        //val sampleAlerts = emptyList<Alert>()
-
         showAlerts(sampleAlerts)
+
+        // Sample devices
+        val sampleDevices = listOf(
+            Device("Lake Device 1", "DEV-001", true, 76, 82, "9:15 AM"),
+            Device("Lake Device 2", "DEV-002", false, 45, 0, "8:50 AM")
+        )
+
+        deviceAdapter = DeviceAdapter(sampleDevices, requireContext())
+        deviceRecycler.adapter = deviceAdapter
 
         return view
     }
