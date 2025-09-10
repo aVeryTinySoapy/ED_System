@@ -27,10 +27,10 @@ class SettingsFragment : Fragment() {
         placeholder = view.findViewById(R.id.devicePlaceholder)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        deviceAdapter = DeviceAdapter(deviceList, requireContext())
+        deviceAdapter = DeviceAdapter(requireContext())
         recyclerView.adapter = deviceAdapter
 
-        // Sample data (comment out to test empty state)
+        // Sample data (uncomment to test)
         // deviceList.add(Device("Lake Monitor A", "EFD-001", true, 8, 92, "3m ago"))
         // deviceList.add(Device("Lake Monitor B", "EFD-002", false, 72, 68, "10m ago"))
 
@@ -46,7 +46,7 @@ class SettingsFragment : Fragment() {
         } else {
             recyclerView.visibility = View.VISIBLE
             placeholder.visibility = View.GONE
-            deviceAdapter.notifyDataSetChanged()
+            deviceAdapter.submitList(deviceList)
         }
     }
 }

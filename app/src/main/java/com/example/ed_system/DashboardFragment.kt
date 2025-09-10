@@ -80,7 +80,6 @@ class DashboardFragment : Fragment() {
         // Alerts section
         alertsRecyclerView = view.findViewById(R.id.alertsRecyclerView)
         noAlertsText = view.findViewById(R.id.noAlertsText)
-
         alertsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         alertsAdapter = AlertAdapter()
         alertsRecyclerView.adapter = alertsAdapter
@@ -88,6 +87,8 @@ class DashboardFragment : Fragment() {
         // Devices section
         deviceRecycler = view.findViewById(R.id.deviceRecycler)
         deviceRecycler.layoutManager = LinearLayoutManager(requireContext())
+        deviceAdapter = DeviceAdapter(requireContext())
+        deviceRecycler.adapter = deviceAdapter
 
         // Sample parameter
         updateDashboard(
@@ -110,20 +111,39 @@ class DashboardFragment : Fragment() {
                 threshold = "Threshold: 7.5",
                 status = "WARNING",
                 timeAgo = "16m ago"
+            ),
+            Alert(
+                iconRes = R.drawable.ic_warning,
+                title = "Low Dissolved Oxygen",
+                description = "DO dropped below safe range (4.5 mg/L)",
+                value = "DO: 4.5 mg/L",
+                threshold = "Threshold: 5.0 mg/L",
+                status = "DANGER",
+                timeAgo = "5m ago"
             )
         )
         showAlerts(sampleAlerts)
 
         // Sample devices
-        val sampleDevices = listOf(
-            Device("Lake Device 1", "DEV-001", true, 76, 82, "9:15 AM"),
-            Device("Lake Device 2", "DEV-002", false, 45, 0, "8:50 AM")
+        val updatedDevices = listOf(
+            Device("Lake Device 1", "DEV-003", true, 90, 75, "10:00 AM"),
         )
-
-        deviceAdapter = DeviceAdapter(sampleDevices, requireContext())
-        deviceRecycler.adapter = deviceAdapter
+        deviceAdapter.submitList(updatedDevices)
 
         return view
+    }
+
+    private fun setValueWithUnit(textView: TextView, value: String, unit: String) {
+        val fullText = "$value $unit"
+        val valueLength = value.length
+        val spannable = android.text.SpannableString(fullText)
+        spannable.setSpan(
+            android.text.style.RelativeSizeSpan(0.7f),
+            valueLength,
+            fullText.length,
+            android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        textView.text = spannable
     }
 
     private fun updateDashboard(
@@ -140,7 +160,7 @@ class DashboardFragment : Fragment() {
         // DO card
         doIcon.setImageResource(R.drawable.ic_oxygen)
         doName.text = "Dissolved Oxygen"
-        doValue.text = dissolvedOxygen
+        setValueWithUnit(doValue, dissolvedOxygen.split(" ")[0], "mg/L")
         setStatus(doStatus, doStatusText)
 
         // pH card
@@ -152,7 +172,7 @@ class DashboardFragment : Fragment() {
         // Temp card
         tempIcon.setImageResource(R.drawable.ic_temperature)
         tempName.text = "Temperature"
-        tempValue.text = temperature
+        setValueWithUnit(tempValue, temperature.split(" ")[0], "°C")
         setStatus(tempStatus, tempStatusText)
     }
 

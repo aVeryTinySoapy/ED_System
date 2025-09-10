@@ -3,12 +3,12 @@
     android:shape="oval">
 
     <!-- Fill color -->
-    <solid android:color="#1A237E" /> <!-- Change to your desired color -->
+    <solid android:color="#03A9F4" /> <!-- Change to your desired color -->
 
     <!-- Optional border -->
     <stroke
         android:width="2dp"
-        android:color="#1A237E" /> <!-- Change stroke color -->
+        android:color="#03A9F4" /> <!-- Change stroke color -->
 
     <!-- Optional padding inside the circle -->
     <padding

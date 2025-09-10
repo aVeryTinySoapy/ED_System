@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.R
 import com.example.ed_system.model.Device
 
-class DeviceAdapter(private val devices: List<Device>, private val context: Context) :
+class DeviceAdapter(private val context: Context) :
     RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
 
+    private val devices = mutableListOf<Device>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_device_card, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_device_status, parent, false)
         return DeviceViewHolder(view)
     }
 
@@ -24,6 +26,12 @@ class DeviceAdapter(private val devices: List<Device>, private val context: Cont
     }
 
     override fun getItemCount(): Int = devices.size
+
+    fun submitList(newDevices: List<Device>) {
+        devices.clear()
+        devices.addAll(newDevices)
+        notifyDataSetChanged()
+    }
 
     inner class DeviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val deviceName: TextView = itemView.findViewById(R.id.deviceName)
@@ -42,7 +50,6 @@ class DeviceAdapter(private val devices: List<Device>, private val context: Cont
             signalStrength.text = "Signal ${device.signalStrength}%"
             lastReading.text = "Last Reading: ${device.lastReading}"
 
-            // Set status text & background
             if (device.isOnline) {
                 deviceStatus.text = "CONNECTED"
                 deviceStatus.setBackgroundResource(R.drawable.status_connected_bg)
@@ -51,13 +58,11 @@ class DeviceAdapter(private val devices: List<Device>, private val context: Cont
                 deviceStatus.setBackgroundResource(R.drawable.status_disconnected_bg)
             }
 
-            // Optionally: change battery color
             batteryIcon.setColorFilter(
                 if (device.batteryLevel > 20) context.getColor(R.color.green)
                 else context.getColor(R.color.red)
             )
 
-            // Optionally: change signal icon tint
             signalIcon.setColorFilter(
                 if (device.signalStrength > 50) context.getColor(R.color.black)
                 else context.getColor(R.color.gray)

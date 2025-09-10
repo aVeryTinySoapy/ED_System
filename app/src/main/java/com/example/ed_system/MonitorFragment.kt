@@ -32,7 +32,7 @@ class MonitorFragment : Fragment() {
         // Example: multiple sites/devices
         monitorList.add(
             Monitor(
-                siteName = "Coastal Site 7",
+                siteName = "Lake Site 7",
                 siteTag = "COASTAL",
                 deviceId = "EFD-757",
                 lastUpdated = "9:03:07 AM",
