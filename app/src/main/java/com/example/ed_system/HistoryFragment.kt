@@ -10,13 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.adapter.HistoryAdapter
+import com.example.ed_system.adapter.ReadingAdapter
 import com.example.ed_system.model.HistoryAverage
+import com.example.ed_system.model.Reading
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var historyTitle: TextView
+
+    private lateinit var recentRecyclerView: RecyclerView
+    private lateinit var readingAdapter: ReadingAdapter
 
     private lateinit var btn24h: Button
     private lateinit var btn7d: Button
@@ -28,19 +33,27 @@ class HistoryFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
+        // Average Values
         historyRecyclerView = view.findViewById(R.id.historyRecyclerView)
         historyTitle = view.findViewById(R.id.historyTitle)
-
-        btn24h = view.findViewById(R.id.btn24h)
-        btn7d = view.findViewById(R.id.btn7d)
-        btn30d = view.findViewById(R.id.btn30d)
-
         historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         historyAdapter = HistoryAdapter(emptyList())
         historyRecyclerView.adapter = historyAdapter
 
+        // Recent Readings
+        recentRecyclerView = view.findViewById(R.id.recentReadingsRecyclerView)
+        recentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        readingAdapter = ReadingAdapter(emptyList())
+        recentRecyclerView.adapter = readingAdapter
+
+        // Buttons
+        btn24h = view.findViewById(R.id.btn24h)
+        btn7d = view.findViewById(R.id.btn7d)
+        btn30d = view.findViewById(R.id.btn30d)
+
         // Default data (7 Days)
         updateHistory("7 Days")
+        updateRecentReadings()
 
         btn24h.setOnClickListener { updateHistory("24 Hours") }
         btn7d.setOnClickListener { updateHistory("7 Days") }
@@ -71,5 +84,17 @@ class HistoryFragment : Fragment() {
         }
 
         historyAdapter.updateData(sampleData)
+    }
+
+    private fun updateRecentReadings() {
+        val sampleReadings = listOf(
+            Reading("Coastal Site 5", "7/4/2025 9:23:27 AM", "10", "7.3", "20°C"),
+            Reading("Lake Site 1", "7/4/2025 9:23:27 AM", "6.8", "10", "16.2°C"),
+            Reading("River Site 3", "7/4/2025 9:23:27 AM", "8.9", "8.0", "13.1°C"),
+            Reading("Coastal Site 8", "7/4/2025 9:23:27 AM", "9.6", "10", "19.4°C"),
+            Reading("River Site 6", "7/4/2025 9:23:27 AM", "8.5", "7.1", "15.8°C")
+        )
+
+        readingAdapter.updateData(sampleReadings)
     }
 }
