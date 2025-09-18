@@ -31,8 +31,8 @@ class SettingsFragment : Fragment() {
         recyclerView.adapter = deviceAdapter
 
         // Sample data (uncomment to test)
-        // deviceList.add(Device("Lake Monitor A", "EFD-001", true, 8, 92, "3m ago"))
-        // deviceList.add(Device("Lake Monitor B", "EFD-002", false, 72, 68, "10m ago"))
+        deviceList.add(Device("Lake Monitor A", "EFD-001", true, 8, 92, "3m ago"))
+        deviceList.add(Device("Lake Monitor B", "EFD-002", false, 72, 68, "10m ago"))
 
         updateDeviceSection()
 

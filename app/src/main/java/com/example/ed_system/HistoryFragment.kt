@@ -13,6 +13,11 @@ import com.example.ed_system.adapter.HistoryAdapter
 import com.example.ed_system.adapter.ReadingAdapter
 import com.example.ed_system.model.HistoryAverage
 import com.example.ed_system.model.Reading
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class HistoryFragment : Fragment() {
 
@@ -27,6 +32,10 @@ class HistoryFragment : Fragment() {
     private lateinit var btn7d: Button
     private lateinit var btn30d: Button
 
+
+    private lateinit var barChart: BarChart
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +48,10 @@ class HistoryFragment : Fragment() {
         historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         historyAdapter = HistoryAdapter(emptyList())
         historyRecyclerView.adapter = historyAdapter
+
+        // Bar Chart
+        barChart = view.findViewById(R.id.barChart)
+        setupBarChart()
 
         // Recent Readings
         recentRecyclerView = view.findViewById(R.id.recentReadingsRecyclerView)
@@ -62,6 +75,7 @@ class HistoryFragment : Fragment() {
         return view
     }
 
+
     private fun updateHistory(period: String) {
         historyTitle.text = "Average Values ($period)"
 
@@ -84,6 +98,21 @@ class HistoryFragment : Fragment() {
         }
 
         historyAdapter.updateData(sampleData)
+    }
+
+    private fun setupBarChart() {
+        val entries = listOf(
+            BarEntry(0f, 8.47f),
+            BarEntry(1f, 7.7f),
+            BarEntry(2f, 15.0f)
+        )
+        val dataSet = BarDataSet(entries, "Parameters")
+        dataSet.setColors(intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_200), requireContext())
+        val data = BarData(dataSet)
+        barChart.data = data
+        barChart.description.isEnabled = false
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("DO", "pH", "Temp"))
+        barChart.invalidate()
     }
 
     private fun updateRecentReadings() {

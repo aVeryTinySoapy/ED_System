@@ -1,13 +1,21 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
+        <!-- HEADER -->
+        <include
+            layout="@layout/layout_app_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
 
         <!-- Time Period Buttons -->
         <LinearLayout
@@ -20,21 +28,24 @@
                 android:id="@+id/btn24h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24 Hours" />
+                android:text="24 Hours"
+                android:backgroundTint="@color/time_period_buttons" />
 
             <Button
                 android:id="@+id/btn7d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="7 Days"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/time_period_buttons"/>
 
             <Button
                 android:id="@+id/btn30d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30 Days"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/time_period_buttons"/>
         </LinearLayout>
 
         <!-- Average Values Section -->
@@ -54,6 +65,14 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never"
             android:nestedScrollingEnabled="false" />
+
+        <!-- Bar Chart -->
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
 
         <!-- Recent Readings Section -->
         <TextView
