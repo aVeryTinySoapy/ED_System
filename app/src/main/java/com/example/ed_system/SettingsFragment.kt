@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ed_system.model.Device
 import com.example.ed_system.adapter.DeviceAdapter
+import com.example.ed_system.model.Device
 
 class SettingsFragment : Fragment() {
 
@@ -30,10 +30,8 @@ class SettingsFragment : Fragment() {
         deviceAdapter = DeviceAdapter(requireContext())
         recyclerView.adapter = deviceAdapter
 
-        // Sample data (uncomment to test)
         deviceList.add(Device("Lake Monitor A", "EFD-001", true, 8, 92, "3m ago"))
-        deviceList.add(Device("Lake Monitor B", "EFD-002", false, 72, 68, "10m ago"))
-
+        deviceList.add(Device("River Sensor B", "EFD-002", false, 7, 88, "12m ago"))
         updateDeviceSection()
 
         return view

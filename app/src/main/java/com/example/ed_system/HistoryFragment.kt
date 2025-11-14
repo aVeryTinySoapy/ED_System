@@ -33,8 +33,9 @@ class HistoryFragment : Fragment() {
     private lateinit var btn30d: Button
 
 
-    private lateinit var barChart: BarChart
-
+    private lateinit var barChartDO: BarChart
+    private lateinit var barChartPH: BarChart
+    private lateinit var barChartTemp: BarChart
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +51,11 @@ class HistoryFragment : Fragment() {
         historyRecyclerView.adapter = historyAdapter
 
         // Bar Chart
-        barChart = view.findViewById(R.id.barChart)
-        setupBarChart()
+
+        barChartDO = view.findViewById(R.id.barChartDO)
+        barChartPH = view.findViewById(R.id.barChartPH)
+        barChartTemp = view.findViewById(R.id.barChartTemp)
+        setupBarCharts()
 
         // Recent Readings
         recentRecyclerView = view.findViewById(R.id.recentReadingsRecyclerView)
@@ -100,28 +104,42 @@ class HistoryFragment : Fragment() {
         historyAdapter.updateData(sampleData)
     }
 
-    private fun setupBarChart() {
-        val entries = listOf(
-            BarEntry(0f, 8.47f),
-            BarEntry(1f, 7.7f),
-            BarEntry(2f, 15.0f)
-        )
-        val dataSet = BarDataSet(entries, "Parameters")
-        dataSet.setColors(intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_200), requireContext())
-        val data = BarData(dataSet)
-        barChart.data = data
-        barChart.description.isEnabled = false
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("DO", "pH", "Temp"))
-        barChart.invalidate()
+    private fun setupBarCharts() {
+        // DO Bar Chart
+        val doEntries = listOf(BarEntry(0f, 8.47f), BarEntry(1f, 8.9f), BarEntry(2f, 8.3f))
+        val doDataSet = BarDataSet(doEntries, "Dissolved Oxygen")
+        doDataSet.color = requireContext().getColor(R.color.teal_200)
+        barChartDO.data = BarData(doDataSet)
+        barChartDO.description.isEnabled = false
+        barChartDO.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
+        barChartDO.invalidate()
+
+        // pH Bar Chart
+        val phEntries = listOf(BarEntry(0f, 7.7f), BarEntry(1f, 7.8f), BarEntry(2f, 7.6f))
+        val phDataSet = BarDataSet(phEntries, "pH Level")
+        phDataSet.color = requireContext().getColor(R.color.teal_700)
+        barChartPH.data = BarData(phDataSet)
+        barChartPH.description.isEnabled = false
+        barChartPH.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
+        barChartPH.invalidate()
+
+
+        // Temperature Bar Chart
+        val tempEntries = listOf(BarEntry(0f, 15.0f), BarEntry(1f, 16.0f), BarEntry(2f, 15.2f))
+        val tempDataSet = BarDataSet(tempEntries, "Temperature")
+        tempDataSet.color = requireContext().getColor(R.color.purple_200)
+        barChartTemp.data = BarData(tempDataSet)
+        barChartTemp.description.isEnabled = false
+        barChartTemp.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
+        barChartTemp.invalidate()
     }
+
 
     private fun updateRecentReadings() {
         val sampleReadings = listOf(
-            Reading("Coastal Site 5", "7/4/2025 9:23:27 AM", "10", "7.3", "20°C"),
-            Reading("Lake Site 1", "7/4/2025 9:23:27 AM", "6.8", "10", "16.2°C"),
+            Reading("River Site 1", "7/4/2025 9:23:27 AM", "6.8", "10", "16.2°C"),
             Reading("River Site 3", "7/4/2025 9:23:27 AM", "8.9", "8.0", "13.1°C"),
-            Reading("Coastal Site 8", "7/4/2025 9:23:27 AM", "9.6", "10", "19.4°C"),
-            Reading("River Site 6", "7/4/2025 9:23:27 AM", "8.5", "7.1", "15.8°C")
+            Reading("River Site 2", "7/4/2025 9:23:27 AM", "8.5", "7.1", "15.8°C")
         )
 
         readingAdapter.updateData(sampleReadings)

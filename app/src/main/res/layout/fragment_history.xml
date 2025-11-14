@@ -68,11 +68,26 @@
 
         <!-- Bar Chart -->
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
+            android:id="@+id/barChartDO"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartPH"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartTemp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
 
         <!-- Recent Readings Section -->
         <TextView
