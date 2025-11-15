@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="Water Quality Monitoring"
             android:textSize="14sp"
-            android:textColor="@color/blue_500" />
+            android:textColor="@color/blue_600" />
     </LinearLayout>
 </LinearLayout>
 

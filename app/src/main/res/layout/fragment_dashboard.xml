@@ -86,6 +86,7 @@
                 android:text="Active Alerts"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="8dp" />
 
@@ -119,6 +120,7 @@
                 android:text="Device Status"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="8dp" />
 
