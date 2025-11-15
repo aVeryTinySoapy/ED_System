@@ -5,7 +5,7 @@
     <color name="green">#4CAF50</color>
     <color name="yellow">#FFC107</color>
     <color name="red">#F44336</color>
-    <color name="nav_selected_color">#1A237E</color>
+    <color name="nav_selected_color">#0891B2</color>
     <color name="nav_unselected_color">#BDBDBD</color>
     <color name="gray">#808080</color>
     <color name="time_period_buttons">#1A237E</color>
@@ -17,6 +17,7 @@
     <color name="blue_500">#2196F3</color>
     <color name="blue_600">#1E88E5</color>
     <color name="dark_gray">#424242</color>
+    <color name="card_white_80">#CCFFFFFF</color>
 
 
 </resources>

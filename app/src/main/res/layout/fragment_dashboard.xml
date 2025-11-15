@@ -27,6 +27,7 @@
                 android:text="Current Parameters"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:textColor="@android:color/white"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="Lake Site 1 • LAKE"
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:layout_marginBottom="16dp" />
 
             <LinearLayout
