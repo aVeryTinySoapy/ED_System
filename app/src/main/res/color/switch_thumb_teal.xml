@@ -1,0 +1,10 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- disabled + checked -->
+    <item android:state_enabled="false" android:state_checked="true" android:color="#660891B2"/>
+    <!-- disabled -->
+    <item android:state_enabled="false" android:color="#BDBDBD"/>
+    <!-- enabled + checked -->
+    <item android:state_checked="true" android:color="#0891B2"/>
+    <!-- enabled + unchecked -->
+    <item android:color="#FFFFFFFF"/>
+</selector>
