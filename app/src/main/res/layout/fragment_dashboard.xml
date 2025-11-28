@@ -34,7 +34,7 @@
                 android:id="@+id/deviceSiteLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lake Site 1 • LAKE"
+                android:text="River Site 1 • Lipadas"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="16dp" />
@@ -76,6 +76,8 @@
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_weight=".90" />
+
+
             </LinearLayout>
 
 
@@ -131,6 +133,17 @@
                 android:overScrollMode="never"
                 android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:id="@+id/noDevicePlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No devices added yet. Please add a device in Settings."
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>

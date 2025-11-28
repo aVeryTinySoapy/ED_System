@@ -15,10 +15,10 @@
 
         <!-- Site name + timestamp -->
         <TextView
-            android:id="@+id/siteName"
+            android:id="@+id/deviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Coastal Site 5"
+            android:text="Device Name"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginBottom="2dp"/>

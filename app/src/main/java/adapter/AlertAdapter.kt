@@ -1,4 +1,4 @@
-package com.example.ed_system.adapter
+package adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,15 +14,6 @@ class AlertAdapter : RecyclerView.Adapter<AlertAdapter.AlertViewHolder>() {
 
     private val alerts = mutableListOf<Alert>()
 
-    inner class AlertViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val icon: ImageView = view.findViewById(R.id.alertIcon)
-        val title: TextView = view.findViewById(R.id.alertTitle)
-        val description: TextView = view.findViewById(R.id.alertDescription)
-        val value: TextView = view.findViewById(R.id.alertValue)
-        val threshold: TextView = view.findViewById(R.id.alertThreshold)
-        val time: TextView = view.findViewById(R.id.alertTime)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlertViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_alert_card, parent, false)
@@ -30,24 +21,7 @@ class AlertAdapter : RecyclerView.Adapter<AlertAdapter.AlertViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
-        val alert = alerts[position]
-        holder.icon.setImageResource(alert.iconRes)
-        holder.title.text = alert.title
-        holder.description.text = alert.description
-        holder.value.text = alert.value
-        holder.threshold.text = alert.threshold
-        holder.time.text = alert.timeAgo
-
-        // Color coding for status
-        val color = when (alert.status.uppercase()) {
-            "WARNING" -> android.R.color.holo_orange_dark
-            "DANGER" -> android.R.color.holo_red_dark
-            "NORMAL" -> android.R.color.holo_green_dark
-            else -> android.R.color.darker_gray
-        }
-        holder.value.setTextColor(
-            ContextCompat.getColor(holder.itemView.context, color)
-        )
+        holder.bind(alerts[position])
     }
 
     override fun getItemCount(): Int = alerts.size
@@ -56,5 +30,35 @@ class AlertAdapter : RecyclerView.Adapter<AlertAdapter.AlertViewHolder>() {
         alerts.clear()
         alerts.addAll(newAlerts)
         notifyDataSetChanged()
+    }
+
+    inner class AlertViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private val icon: ImageView = itemView.findViewById(R.id.alertIcon)
+        private val title: TextView = itemView.findViewById(R.id.alertTitle)
+        private val time: TextView = itemView.findViewById(R.id.alertTime)
+        private val description: TextView = itemView.findViewById(R.id.alertDescription)
+        private val value: TextView = itemView.findViewById(R.id.alertValue)
+        private val threshold: TextView = itemView.findViewById(R.id.alertThreshold)
+        private val status: TextView = itemView.findViewById(R.id.alertStatus)
+
+        fun bind(alert: Alert) {
+            icon.setImageResource(alert.iconRes)
+            title.text = alert.title
+            description.text = alert.description
+            value.text = alert.value
+            threshold.text = alert.threshold
+            time.text = alert.timeAgo
+            status.text = alert.status
+
+            val color = when (alert.status.uppercase()) {
+                "DANGER" -> R.color.red
+                "WARNING" -> R.color.orange
+                else -> R.color.gray
+            }
+
+            status.setTextColor(ContextCompat.getColor(itemView.context, color))
+            value.setTextColor(ContextCompat.getColor(itemView.context, color))
+        }
     }
 }

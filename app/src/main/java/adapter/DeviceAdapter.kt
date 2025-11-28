@@ -37,17 +37,11 @@ class DeviceAdapter(private val context: Context) :
         private val deviceName: TextView = itemView.findViewById(R.id.deviceName)
         private val deviceId: TextView = itemView.findViewById(R.id.deviceId)
         private val deviceStatus: TextView = itemView.findViewById(R.id.deviceStatus)
-        private val batteryIcon: ImageView = itemView.findViewById(R.id.batteryIcon)
-        private val batteryLevel: TextView = itemView.findViewById(R.id.batteryLevel)
-        private val signalIcon: ImageView = itemView.findViewById(R.id.signalIcon)
-        private val signalStrength: TextView = itemView.findViewById(R.id.signalStrength)
         private val lastReading: TextView = itemView.findViewById(R.id.lastReading)
 
         fun bind(device: Device) {
             deviceName.text = device.name
             deviceId.text = device.deviceId
-            batteryLevel.text = "Battery ${device.batteryLevel}%"
-            signalStrength.text = "Signal ${device.signalStrength}%"
             lastReading.text = "Last Reading: ${device.lastReading}"
 
             if (device.isOnline) {
@@ -57,16 +51,6 @@ class DeviceAdapter(private val context: Context) :
                 deviceStatus.text = "DISCONNECTED"
                 deviceStatus.setBackgroundResource(R.drawable.status_disconnected_bg)
             }
-
-            batteryIcon.setColorFilter(
-                if (device.batteryLevel > 20) context.getColor(R.color.green)
-                else context.getColor(R.color.red)
-            )
-
-            signalIcon.setColorFilter(
-                if (device.signalStrength > 50) context.getColor(R.color.black)
-                else context.getColor(R.color.gray)
-            )
         }
     }
 }

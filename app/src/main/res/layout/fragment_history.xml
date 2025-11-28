@@ -22,53 +22,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/btn24h"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="24 Hours"
-                    android:backgroundTint="@color/time_period_buttons" />
-
-                <Button
-                    android:id="@+id/btn7d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="7 Days"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="@color/time_period_buttons"/>
-
-                <Button
-                    android:id="@+id/btn30d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30 Days"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="@color/time_period_buttons"/>
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/historyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Average Values"
+                android:text="History Graphs"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/historyRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:nestedScrollingEnabled="false" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChartDO"

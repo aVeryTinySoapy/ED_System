@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.R
-import com.example.ed_system.model.Monitor
+import model.Monitor
 
 class MonitorAdapter(private val monitors: List<Monitor>) :
     RecyclerView.Adapter<MonitorAdapter.MonitorViewHolder>() {
@@ -41,24 +41,36 @@ class MonitorAdapter(private val monitors: List<Monitor>) :
         // --- Dissolved Oxygen ---
         holder.doCard.findViewById<TextView>(R.id.name).text = "Dissolved Oxygen"
         holder.doCard.findViewById<TextView>(R.id.value).text = monitor.doValue
-        holder.doCard.findViewById<TextView>(R.id.status).text = monitor.doStatus
-        holder.doCard.findViewById<ImageView>(R.id.icon)
-            .setImageResource(R.drawable.ic_oxygen) // <- your oxygen icon
+        val doStatusTextView = holder.doCard.findViewById<TextView>(R.id.status)
+        doStatusTextView.text = monitor.doStatus
+        doStatusTextView.setTextColor(getStatusColor(monitor.doStatus))
+        holder.doCard.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_oxygen)
 
         // --- pH ---
         holder.phCard.findViewById<TextView>(R.id.name).text = "pH Level"
         holder.phCard.findViewById<TextView>(R.id.value).text = monitor.phValue
-        holder.phCard.findViewById<TextView>(R.id.status).text = monitor.phStatus
-        holder.phCard.findViewById<ImageView>(R.id.icon)
-            .setImageResource(R.drawable.ic_ph) // <- your pH icon
+        val phStatusTextView = holder.phCard.findViewById<TextView>(R.id.status)
+        phStatusTextView.text = monitor.phStatus
+        phStatusTextView.setTextColor(getStatusColor(monitor.phStatus))
+        holder.phCard.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_ph)
 
         // --- Temperature ---
         holder.tempCard.findViewById<TextView>(R.id.name).text = "Temperature"
         holder.tempCard.findViewById<TextView>(R.id.value).text = monitor.tempValue
-        holder.tempCard.findViewById<TextView>(R.id.status).text = monitor.tempStatus
-        holder.tempCard.findViewById<ImageView>(R.id.icon)
-            .setImageResource(R.drawable.ic_temperature) // <- your temperature icon
+        val tempStatusTextView = holder.tempCard.findViewById<TextView>(R.id.status)
+        tempStatusTextView.text = monitor.tempStatus
+        tempStatusTextView.setTextColor(getStatusColor(monitor.tempStatus))
+        holder.tempCard.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_temperature)
     }
 
-    override fun getItemCount() = monitors.size
+    override fun getItemCount(): Int = monitors.size
+
+    private fun getStatusColor(status: String): Int {
+        return when (status.uppercase()) {
+            "NORMAL" -> android.graphics.Color.parseColor("#4CAF50")   // Green
+            "WARNING" -> android.graphics.Color.parseColor("#FF9800")  // Orange
+            "DISCONNECTED" -> android.graphics.Color.parseColor("#9E9E9E") // Gray
+            else -> android.graphics.Color.BLACK
+        }
+    }
 }

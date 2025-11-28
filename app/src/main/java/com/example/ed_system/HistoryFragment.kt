@@ -1,155 +1,234 @@
 package com.example.ed_system
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ed_system.adapter.HistoryAdapter
-import com.example.ed_system.adapter.ReadingAdapter
-import com.example.ed_system.model.HistoryAverage
-import com.example.ed_system.model.Reading
+import com.example.ed_system.adapter.RecentReadingAdapter
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import model.RecentReading
+import org.json.JSONObject
+import java.net.URL
+import kotlin.concurrent.thread
+import android.os.Environment
+import android.widget.Toast
+import com.google.android.material.button.MaterialButton
+import java.io.File
+import java.io.FileWriter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var historyAdapter: HistoryAdapter
-    private lateinit var historyTitle: TextView
-
-    private lateinit var recentRecyclerView: RecyclerView
-    private lateinit var readingAdapter: ReadingAdapter
-
-    private lateinit var btn24h: Button
-    private lateinit var btn7d: Button
-    private lateinit var btn30d: Button
-
+    private lateinit var barChartTemp: BarChart
     private lateinit var barChartDO: BarChart
     private lateinit var barChartPH: BarChart
-    private lateinit var barChartTemp: BarChart
+    private lateinit var recentRecycler: RecyclerView
+    private lateinit var placeholder: TextView
+    private lateinit var btnExport: MaterialButton
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val recentList = mutableListOf<RecentReading>()
+    private lateinit var adapter: RecentReadingAdapter
+
+    private val pollingInterval = 10_000L // 10 seconds
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
-        historyRecyclerView = view.findViewById(R.id.historyRecyclerView)
-        historyTitle = view.findViewById(R.id.historyTitle)
-        historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        historyAdapter = HistoryAdapter(emptyList())
-        historyRecyclerView.adapter = historyAdapter
-
+        barChartTemp = view.findViewById(R.id.barChartTemp)
         barChartDO = view.findViewById(R.id.barChartDO)
         barChartPH = view.findViewById(R.id.barChartPH)
-        barChartTemp = view.findViewById(R.id.barChartTemp)
-        setupBarCharts()
+        recentRecycler = view.findViewById(R.id.recentReadingsRecyclerView)
+        placeholder = view.findViewById(R.id.tvExportHint)
+        btnExport = view.findViewById(R.id.btnExportData)
 
-        recentRecyclerView = view.findViewById(R.id.recentReadingsRecyclerView)
-        recentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        readingAdapter = ReadingAdapter(emptyList())
-        recentRecyclerView.adapter = readingAdapter
+        val deviceName = DeviceManager.selectedDevice?.name ?: "Unknown Device"
+        adapter = RecentReadingAdapter(recentList, deviceName)
+        recentRecycler.layoutManager = LinearLayoutManager(requireContext())
+        recentRecycler.adapter = adapter
 
-        btn24h = view.findViewById(R.id.btn24h)
-        btn7d = view.findViewById(R.id.btn7d)
-        btn30d = view.findViewById(R.id.btn30d)
+        btnExport.setOnClickListener { exportCsv() }
 
-        updateHistory("7 Days")
-        updateRecentReadings()
-
-        btn24h.setOnClickListener { updateHistory("24 Hours") }
-        btn7d.setOnClickListener { updateHistory("7 Days") }
-        btn30d.setOnClickListener { updateHistory("30 Days") }
-
+        startPolling()
         return view
     }
 
-    private fun updateHistory(period: String) {
-        historyTitle.text = "Average Values ($period)"
-        val sampleData = when (period) {
-            "24 Hours" -> listOf(
-                HistoryAverage("Dissolved Oxygen", "8.9 mg/L", "Stable"),
-                HistoryAverage("pH Level", "7.8", "Stable"),
-                HistoryAverage("Temperature", "16.0 °C", "Stable")
-            )
-            "30 Days" -> listOf(
-                HistoryAverage("Dissolved Oxygen", "8.3 mg/L", "Stable"),
-                HistoryAverage("pH Level", "7.6", "Stable"),
-                HistoryAverage("Temperature", "15.2 °C", "Stable")
-            )
-            else -> listOf(
-                HistoryAverage("Dissolved Oxygen", "8.47 mg/L", "Stable"),
-                HistoryAverage("pH Level", "7.7", "Stable"),
-                HistoryAverage("Temperature", "15.0 °C", "Stable")
-            )
-        }
-        historyAdapter.updateData(sampleData)
+    private fun startPolling() {
+        handler.post(object : Runnable {
+            override fun run() {
+                fetchHistoryData()
+                handler.postDelayed(this, pollingInterval)
+            }
+        })
     }
 
-    private fun setupBarCharts() {
-        // DO
-        val doEntries = listOf(BarEntry(0f, 8.47f), BarEntry(1f, 8.9f), BarEntry(2f, 8.3f))
-        val doSet = BarDataSet(doEntries, "Dissolved Oxygen").apply {
-            color = requireContext().getColor(R.color.deep_blue)
+    private fun fetchHistoryData() {
+        val device = DeviceManager.selectedDevice
+        if (device == null) {
+            handler.post {
+                placeholder.visibility = View.VISIBLE
+                placeholder.text = "No device added yet. Please add a device in Settings."
+                barChartTemp.visibility = View.GONE
+                barChartDO.visibility = View.GONE
+                barChartPH.visibility = View.GONE
+                recentRecycler.visibility = View.GONE
+            }
+            return
         }
-        barChartDO.data = BarData(doSet).apply { barWidth = 0.6f }
-        barChartDO.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
-        configureChart(barChartDO)
 
-        // pH
-        val phEntries = listOf(BarEntry(0f, 7.7f), BarEntry(1f, 7.8f), BarEntry(2f, 7.6f))
-        val phSet = BarDataSet(phEntries, "pH Level").apply {
-            color = requireContext().getColor(R.color.bright_azure)
+        handler.post {
+            placeholder.visibility = View.GONE
+            barChartTemp.visibility = View.VISIBLE
+            barChartDO.visibility = View.VISIBLE
+            barChartPH.visibility = View.VISIBLE
+            recentRecycler.visibility = View.VISIBLE
         }
-        barChartPH.data = BarData(phSet).apply { barWidth = 0.6f }
-        barChartPH.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
-        configureChart(barChartPH)
 
-        // Temperature
-        val tempEntries = listOf(BarEntry(0f, 15.0f), BarEntry(1f, 16.0f), BarEntry(2f, 15.2f))
-        val tempSet = BarDataSet(tempEntries, "Temperature").apply {
-            color = requireContext().getColor(R.color.ice_blue)
+        thread {
+            try {
+                val url = "https://api.thingspeak.com/channels/${device.channelId}/feeds.json?results=25"
+                val response = URL(url).readText()
+                val json = JSONObject(response)
+                val feeds = json.optJSONArray("feeds") ?: return@thread
+
+                recentList.clear()
+                val allTemp = mutableListOf<Float>()
+                val allDo = mutableListOf<Float>()
+                val allPh = mutableListOf<Float>()
+                val allTimestamps = mutableListOf<String>()
+
+                for (i in 0 until feeds.length()) {
+                    val f = feeds.getJSONObject(i)
+                    val temp = f.optString("field1", "0").toFloatOrNull() ?: 0f
+                    val doVal = f.optString("field2", "0").toFloatOrNull() ?: 0f
+                    val phVal = f.optString("field3", "0").toFloatOrNull() ?: 0f
+                    val createdAt = f.optString("created_at", "--")
+                    val formattedTimestamp = formatTimestamp(createdAt)
+
+                    allTemp.add(temp)
+                    allDo.add(doVal)
+                    allPh.add(phVal)
+                    allTimestamps.add(formattedTimestamp)
+
+                    recentList.add(RecentReading(formattedTimestamp, doVal, phVal, temp))
+                }
+
+                val count = allTemp.size
+                val fromIndex = if (count > 5) count - 5 else 0
+                val tempLast5 = allTemp.subList(fromIndex, count)
+                val doLast5 = allDo.subList(fromIndex, count)
+                val phLast5 = allPh.subList(fromIndex, count)
+                val timestampsLast5 = allTimestamps.subList(fromIndex, count)
+
+                handler.post {
+                    // Use full date + time for x-axis
+                    setupSingleBarChart(barChartTemp, tempLast5, timestampsLast5, "Temperature (°C)", 0xFFFF5722.toInt())
+                    setupSingleBarChart(barChartDO, doLast5, timestampsLast5, "Dissolved Oxygen (mg/L)", 0xFF4CAF50.toInt())
+                    setupSingleBarChart(barChartPH, phLast5, timestampsLast5, "pH Level", 0xFF2196F3.toInt())
+
+                    recentList.reverse()
+                    adapter.notifyDataSetChanged()
+                    recentRecycler.scrollToPosition(0)
+                }
+            } catch (t: Throwable) {
+                t.printStackTrace()
+            }
         }
-        barChartTemp.data = BarData(tempSet).apply { barWidth = 0.6f }
-        barChartTemp.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("7d", "24h", "30d"))
-        configureChart(barChartTemp)
     }
 
-    private fun configureChart(chart: BarChart) {
-        chart.description.isEnabled = false
+    private fun setupSingleBarChart(chart: BarChart, values: List<Float>, timestamps: List<String>, title: String, barColor: Int) {
+        val entries = values.mapIndexed { index, v -> BarEntry(index.toFloat(), v) }
+        val dataSet = BarDataSet(entries, title).apply {
+            color = barColor
+            valueTextColor = 0xFF000000.toInt()
+            valueTextSize = 12f
+        }
+
+        chart.data = BarData(dataSet).apply { barWidth = 0.45f }
         chart.setFitBars(true)
 
-        chart.setExtraOffsets(16f, 16f, 16f, 20f)
+        chart.description.apply {
+            text = title
+            textSize = 14f
+            textColor = 0xFF000000.toInt()
+        }
 
-        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        chart.xAxis.granularity = 1f
-        chart.xAxis.yOffset = 12f
-        chart.xAxis.xOffset = 6f
-        chart.xAxis.setAvoidFirstLastClipping(true)
+        chart.axisLeft.apply { textColor = 0xFF000000.toInt(); axisMinimum = 0f }
+        chart.axisRight.apply { textColor = 0xFF000000.toInt(); axisMinimum = 0f }
+        chart.legend.textColor = 0xFF000000.toInt()
 
-        chart.axisRight.isEnabled = false
-        chart.axisLeft.xOffset = 12f
-
-        chart.legend.isEnabled = true
+        chart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawGridLines(false)
+            granularity = 1f
+            textColor = 0xFF000000.toInt()
+            valueFormatter = IndexAxisValueFormatter(timestamps) // full date + time
+            labelRotationAngle = -45f // tilt labels for readability
+        }
 
         chart.invalidate()
     }
 
-    private fun updateRecentReadings() {
-        val sampleReadings = listOf(
-            Reading("River Site 1", "7/4/2025 9:23:27 AM", "6.8", "10", "16.2°C"),
-            Reading("River Site 3", "7/4/2025 9:23:27 AM", "8.9", "8.0", "13.1°C"),
-            Reading("River Site 2", "7/4/2025 9:23:27 AM", "8.5", "7.1", "15.8°C")
-        )
-        readingAdapter.updateData(sampleReadings)
+    private fun exportCsv() {
+        if (recentList.isEmpty()) {
+            Toast.makeText(requireContext(), "No data to export.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val deviceName = DeviceManager.selectedDevice?.name ?: "UnknownDevice"
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm", Locale.getDefault())
+        val fileName = "${deviceName}_${sdf.format(Date())}.csv"
+
+        val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(downloads, fileName)
+
+        try {
+            FileWriter(file).use { writer ->
+                writer.append("Device Name,Timestamp,DO (mg/L),pH,Temperature (°C)\n")
+                recentList.forEach { r ->
+                    writer.append("$deviceName,${r.timestamp},${r.doValue},${r.phValue},${r.tempValue}\n")
+                }
+            }
+
+            Toast.makeText(requireContext(), "CSV exported to Downloads.", Toast.LENGTH_SHORT).show()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun formatTimestamp(timestamp: String): String {
+        return try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            sdf.timeZone = TimeZone.getTimeZone("GMT") // ThingSpeak is GMT
+            val date = sdf.parse(timestamp)
+            val sdfLocal = SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.getDefault())
+            sdfLocal.timeZone = TimeZone.getTimeZone("GMT+08:00") // convert to GMT+8
+            date?.let { sdfLocal.format(it) } ?: "--"
+        } catch (e: Exception) {
+            "--"
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        handler.removeCallbacksAndMessages(null)
     }
 }

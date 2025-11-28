@@ -21,6 +21,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Placeholder when no devices exist -->
+            <TextView
+                android:id="@+id/noDevicePlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No devices added yet"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:visibility="gone"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/monitorRecyclerView"
                 android:layout_width="match_parent"

@@ -1,14 +1,14 @@
-package com.example.ed_system.model
+package model
 
 data class Monitor(
     val siteName: String,
     val siteTag: String,
     val deviceId: String,
-    val lastUpdated: String,
-    val doValue: String,
-    val doStatus: String,
-    val phValue: String,
-    val phStatus: String,
-    val tempValue: String,
-    val tempStatus: String
+    var lastUpdated: String,
+    var doValue: String,
+    var doStatus: String,
+    var phValue: String,
+    var phStatus: String,
+    var tempValue: String,
+    var tempStatus: String
 )

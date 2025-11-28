@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.R
-import com.example.ed_system.model.Reading
+import model.Reading
 
 class ReadingAdapter(private var readings: List<Reading>) :
     RecyclerView.Adapter<ReadingAdapter.ReadingViewHolder>() {

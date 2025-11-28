@@ -1,4 +1,4 @@
-package com.example.ed_system.model
+package model
 
 data class Reading(
     val siteName: String,

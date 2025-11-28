@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    ```
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Temperature -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature (°C)"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/tempMinInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Min"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"/>
+
+            <EditText
+                android:id="@+id/tempMaxInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Max"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Dissolved Oxygen -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dissolved Oxygen (mg/L)"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/doMinInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Min"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"/>
+
+            <EditText
+                android:id="@+id/doMaxInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Max"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <!-- pH -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pH Level"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/phMinInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Min"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"/>
+
+            <EditText
+                android:id="@+id/phMaxInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Max"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="#E0F7FA"
+                android:padding="8dp"
+                android:textAlignment="center"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    ```
+
+</ScrollView>
