@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ed_system.adapter.RecentReadingAdapter
-import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import model.RecentReading
 import org.json.JSONObject
@@ -31,9 +31,9 @@ import java.util.*
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var barChartTemp: BarChart
-    private lateinit var barChartDO: BarChart
-    private lateinit var barChartPH: BarChart
+    private lateinit var lineChartTemp: LineChart
+    private lateinit var lineChartDO: LineChart
+    private lateinit var lineChartPH: LineChart
     private lateinit var recentRecycler: RecyclerView
     private lateinit var placeholder: TextView
     private lateinit var btnExport: MaterialButton
@@ -51,9 +51,9 @@ class HistoryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
-        barChartTemp = view.findViewById(R.id.barChartTemp)
-        barChartDO = view.findViewById(R.id.barChartDO)
-        barChartPH = view.findViewById(R.id.barChartPH)
+        lineChartTemp = view.findViewById(R.id.barChartTemp)
+        lineChartDO = view.findViewById(R.id.barChartDO)
+        lineChartPH = view.findViewById(R.id.barChartPH)
         recentRecycler = view.findViewById(R.id.recentReadingsRecyclerView)
         placeholder = view.findViewById(R.id.tvExportHint)
         btnExport = view.findViewById(R.id.btnExportData)
@@ -84,9 +84,9 @@ class HistoryFragment : Fragment() {
             handler.post {
                 placeholder.visibility = View.VISIBLE
                 placeholder.text = "No device added yet. Please add a device in Settings."
-                barChartTemp.visibility = View.GONE
-                barChartDO.visibility = View.GONE
-                barChartPH.visibility = View.GONE
+                lineChartTemp.visibility = View.GONE
+                lineChartDO.visibility = View.GONE
+                lineChartPH.visibility = View.GONE
                 recentRecycler.visibility = View.GONE
             }
             return
@@ -94,9 +94,9 @@ class HistoryFragment : Fragment() {
 
         handler.post {
             placeholder.visibility = View.GONE
-            barChartTemp.visibility = View.VISIBLE
-            barChartDO.visibility = View.VISIBLE
-            barChartPH.visibility = View.VISIBLE
+            lineChartTemp.visibility = View.VISIBLE
+            lineChartDO.visibility = View.VISIBLE
+            lineChartPH.visibility = View.VISIBLE
             recentRecycler.visibility = View.VISIBLE
         }
 
@@ -137,10 +137,10 @@ class HistoryFragment : Fragment() {
                 val timestampsLast5 = allTimestamps.subList(fromIndex, count)
 
                 handler.post {
-                    // Use full date + time for x-axis
-                    setupSingleBarChart(barChartTemp, tempLast5, timestampsLast5, "Temperature (°C)", 0xFFFF5722.toInt())
-                    setupSingleBarChart(barChartDO, doLast5, timestampsLast5, "Dissolved Oxygen (mg/L)", 0xFF4CAF50.toInt())
-                    setupSingleBarChart(barChartPH, phLast5, timestampsLast5, "pH Level", 0xFF2196F3.toInt())
+
+                    setupSingleLineChart(lineChartTemp, tempLast5, timestampsLast5, "Temperature (°C)", 0xFFFF5722.toInt())
+                    setupSingleLineChart(lineChartDO, doLast5, timestampsLast5, "Dissolved Oxygen (mg/L)", 0xFF4CAF50.toInt())
+                    setupSingleLineChart(lineChartPH, phLast5, timestampsLast5, "pH Level", 0xFF2196F3.toInt())
 
                     recentList.reverse()
                     adapter.notifyDataSetChanged()
@@ -152,16 +152,23 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun setupSingleBarChart(chart: BarChart, values: List<Float>, timestamps: List<String>, title: String, barColor: Int) {
-        val entries = values.mapIndexed { index, v -> BarEntry(index.toFloat(), v) }
-        val dataSet = BarDataSet(entries, title).apply {
-            color = barColor
-            valueTextColor = 0xFF000000.toInt()
-            valueTextSize = 12f
+    private fun setupSingleLineChart(chart: LineChart, values: List<Float>, timestamps: List<String>, title: String, lineColor: Int) {
+
+        val entries = values.mapIndexed { index, v ->
+            Entry(index.toFloat(), v)
         }
 
-        chart.data = BarData(dataSet).apply { barWidth = 0.45f }
-        chart.setFitBars(true)
+        val dataSet = LineDataSet(entries, title).apply {
+            color = lineColor
+            setCircleColor(lineColor)
+            lineWidth = 2.5f
+            circleRadius = 4f
+            valueTextColor = 0xFF000000.toInt()
+            valueTextSize = 11f
+            setDrawValues(true)
+        }
+
+        chart.data = LineData(dataSet)
 
         chart.description.apply {
             text = title
@@ -169,8 +176,13 @@ class HistoryFragment : Fragment() {
             textColor = 0xFF000000.toInt()
         }
 
-        chart.axisLeft.apply { textColor = 0xFF000000.toInt(); axisMinimum = 0f }
-        chart.axisRight.apply { textColor = 0xFF000000.toInt(); axisMinimum = 0f }
+        chart.axisLeft.apply {
+            textColor = 0xFF000000.toInt()
+            axisMinimum = 0f
+        }
+
+        chart.axisRight.isEnabled = false
+
         chart.legend.textColor = 0xFF000000.toInt()
 
         chart.xAxis.apply {
@@ -178,8 +190,8 @@ class HistoryFragment : Fragment() {
             setDrawGridLines(false)
             granularity = 1f
             textColor = 0xFF000000.toInt()
-            valueFormatter = IndexAxisValueFormatter(timestamps) // full date + time
-            labelRotationAngle = -45f // tilt labels for readability
+            valueFormatter = IndexAxisValueFormatter(timestamps)
+            labelRotationAngle = -45f
         }
 
         chart.invalidate()
@@ -217,10 +229,10 @@ class HistoryFragment : Fragment() {
     private fun formatTimestamp(timestamp: String): String {
         return try {
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-            sdf.timeZone = TimeZone.getTimeZone("GMT") // ThingSpeak is GMT
+            sdf.timeZone = TimeZone.getTimeZone("GMT")
             val date = sdf.parse(timestamp)
             val sdfLocal = SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.getDefault())
-            sdfLocal.timeZone = TimeZone.getTimeZone("GMT+08:00") // convert to GMT+8
+            sdfLocal.timeZone = TimeZone.getTimeZone("GMT+08:00")
             date?.let { sdfLocal.format(it) } ?: "--"
         } catch (e: Exception) {
             "--"

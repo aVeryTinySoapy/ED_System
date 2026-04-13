@@ -33,8 +33,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
 
-
-            <com.github.mikephil.charting.charts.BarChart
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/barChartDO"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
@@ -44,7 +43,7 @@
                 android:padding="20dp"
                 android:clipToOutline="true"/>
 
-            <com.github.mikephil.charting.charts.BarChart
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/barChartPH"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
@@ -53,7 +52,7 @@
                 android:padding="20dp"
                 android:clipToOutline="true"/>
 
-            <com.github.mikephil.charting.charts.BarChart
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/barChartTemp"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
@@ -61,7 +60,6 @@
                 android:background="@drawable/chart_background"
                 android:padding="20dp"
                 android:clipToOutline="true"/>
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,7 +78,6 @@
                 android:overScrollMode="never"
                 android:nestedScrollingEnabled="false" />
 
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnExportData"
                 android:layout_width="wrap_content"
@@ -96,7 +93,6 @@
                 app:iconTint="@android:color/white"
                 app:iconPadding="8dp"
                 app:iconGravity="textStart" />
-
 
             <TextView
                 android:id="@+id/tvExportHint"

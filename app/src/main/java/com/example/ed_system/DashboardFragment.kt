@@ -242,7 +242,7 @@ class DashboardFragment : Fragment() {
         if (doValueStr != "--") {
             val doFloat = doValueStr.toFloatOrNull() ?: 0f
             val doStatusStr = when {
-                doFloat < 7 || doFloat > 20 -> "WARNING"
+                doFloat < 7 || doFloat > 40 -> "WARNING"
                 else -> "NORMAL"
             }
             setStatus(doStatus, doStatusStr)
