@@ -19,6 +19,8 @@
     <color name="dark_gray">#424242</color>
     <color name="card_white_80">#CCFFFFFF</color>
     <color name="orange">#FF5700</color>
+    <color name="deep_teal">#0E7490</color>
+    <color name="stream_blue">#4FB3D9</color>
 
 
 </resources>
